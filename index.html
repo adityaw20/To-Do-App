@@ -102,16 +102,23 @@
     </div>
 
     <script>
-        const todolist = [];
+        let todolist = [];
+
+        const listOfLocalStorage = localStorage.getItem("todolist");
+        if (listOfLocalStorage) {
+            todolist = JSON.parse(listOfLocalStorage);
+            renderTodo();
+        }
 
         function add() {
             const inputElement = document.getElementById('input');
             todolist.push(inputElement.value);
             inputElement.value = "";
 
+            localStorage.setItem("todolist", JSON.stringify(todolist));
+
             renderTodo()
         }
-
         function renderTodo() {
             const listContainer = document.getElementById('list-container');
             listContainer.innerHTML = "";
@@ -122,6 +129,7 @@
                                             </button> </div> </div>`;
             }
         }
+
     </script>
 </body>
 
