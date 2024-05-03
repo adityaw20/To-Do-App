@@ -6,6 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To do App</title>
 </head>
+<style>
+    body {
+        background-color: #FF3CAC;
+        background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+        min-height: 100vh;
+
+    }
+
+    .action-container {
+        background-color: #fff;
+        width: 350px;
+        padding: 20px;
+        display: block;
+        margin: 50px auto;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    }
+</style>
 
 <body>
     <div class="list-container" id="list-container"> </div>
@@ -30,7 +49,17 @@
 
             renderTodo()
         }
-        
+
+        function renderTodo() {
+            const listContainer = document.getElementById('list-container');
+            listContainer.innerHTML = "";
+
+            for (const todoItem of todolist) {
+                listContainer.innerHTML += ` <div class="todo-item">  <p> ${todoItem}</p>
+                                            <button type="button" class=" btn-delete"><i class="fa-solid fa-trash"></i>
+                                            </button> </div> </div>`;
+            }
+        }
     </script>
 </body>
 
