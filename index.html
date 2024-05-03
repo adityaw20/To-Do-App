@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To do App</title>
+    <script src="https://kit.fontawesome.com/fabfdf08cb.js" crossorigin="anonymous"></script>
+    <title>To do List</title>
 </head>
 <style>
     body {
-        background-color: #FF3CAC;
-        background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+        background-color: #FFFFFF;
+        background-image: linear-gradient(180deg, #FFFFFF 0%, #6284FF 50%, #FF0000 100%);
         min-height: 100vh;
 
     }
@@ -23,6 +24,67 @@
         border: none;
         border-radius: 5px;
         box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+    }
+
+    .input-container {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    input {
+        width: 70%;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 10px;
+        border: 2px solid #d1d3d4;
+        border-radius: 50px;
+    }
+
+    .btn {
+        background-image: linear-gradient(to right, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+        color: #fff;
+        font-size: 20px;
+        padding: 5px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .list-container {
+        background-color: #fff;
+        width: 350px;
+        height: 250px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+        display: block;
+        margin: 50px auto;
+        padding: 20px 20px;
+        border-radius: 10px;
+        overflow-y: scroll;
+    }
+
+    .todo-item {
+        background-color: #ffffff;
+        height: 50px;
+        font-size: 25px;
+        font-weight: bold;
+        padding: 5px 10px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #d1d3d4;
+    }
+
+    .btn-delete {
+        background-image: linear-gradient(180deg, #ff8177 0%, #ff867a 0%, #ff8c7f 21%, #f99185 52%, #cf556c 78%, #b12a5b 100%);
+        color: #ffffff;
+        height: 100%;
+        width: 40px;
+        padding: 7px 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        outline: none;
     }
 </style>
 
