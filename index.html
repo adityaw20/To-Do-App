@@ -10,16 +10,16 @@
 <style>
     :root {
         --bg-primary: #0f172a;
-        --bg-secondary: rgba(30,41,59,0.8);
-        --bg-item: rgba(30,41,59,0.7);
+        --bg-secondary: #1e293b;
+        --bg-item: #0f172a;
         --text-primary: white;
         --accent: #38bdf8;
     }
 
     body.light {
         --bg-primary: #f1f5f9;
-        --bg-secondary: rgba(255,255,255,0.8);
-        --bg-item: rgba(255,255,255,0.7);
+        --bg-secondary: white;
+        --bg-item: #f1f5f9;
         --text-primary: #0f172a;
         --accent: #0ea5e9;
     }
@@ -27,23 +27,39 @@
     body {
         margin: 0;
         font-family: 'Segoe UI', sans-serif;
-        background-image: url('https://img.freepik.com/free-vector/set-torii-gates-water_52683-44986.jpg?semt=ais_user_personalization&w=740&q=80');
-        background-position: center;
-        background-size: cover;
-        background-repeat: no-repeat;
+        background: var(--bg-primary);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
         color: var(--text-primary);
         transition: 0.3s;
         overflow: hidden;
     }
 
-    /* 🌫 Overlay for readability */
-    body::after {
+    /* 🔥 Animated Background */
+    body::before {
         content: "";
         position: fixed;
-        inset: 0;
-        background: var(--bg-primary);
-        opacity: 0.75;
-        pointer-events: none;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            #38bdf8,
+            #818cf8,
+            #f472b6,
+            #38bdf8
+        );
+        background-size: 300% 300%;
+        animation: gradientMove 12s ease infinite;
+        opacity: 0.15;
+        z-index: -1;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .app-container {
@@ -51,9 +67,7 @@
         width: 420px;
         padding: 25px;
         border-radius: 15px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        position: relative;
-        z-index: 1;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
         transition: 0.3s;
     }
 
@@ -72,7 +86,7 @@
     .counter {
         text-align: center;
         font-size: 14px;
-        opacity: 0.7;
+        opacity: 0.6;
         margin-bottom: 15px;
     }
 
@@ -169,6 +183,7 @@
         transform: scale(1.15);
     }
 
+    /* 🌗 Theme Toggle */
     .theme-toggle {
         cursor: pointer;
         font-size: 18px;
@@ -185,8 +200,7 @@
         bottom: 15px;
         right: 20px;
         font-size: 14px;
-        opacity: 0.75;
-        z-index: 1;
+        opacity: 0.7;
     }
 
     .footer a {
