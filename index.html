@@ -11,33 +11,33 @@
     body {
         margin: 0;
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #6284FF, #FF0000);
+        background: #0f172a;   /* Professional dark */
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-    }
-
-    .app-container {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(12px);
-        border-radius: 18px;
-        padding: 25px;
-        width: 400px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         color: white;
     }
 
+    .app-container {
+        background: #1e293b;
+        width: 420px;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
     h1 {
+        margin: 0;
         text-align: center;
-        margin-bottom: 10px;
+        font-weight: 600;
     }
 
     .counter {
         text-align: center;
-        opacity: 0.8;
-        margin-bottom: 20px;
         font-size: 14px;
+        opacity: 0.6;
+        margin-bottom: 20px;
     }
 
     .input-container {
@@ -48,43 +48,69 @@
     input {
         flex: 1;
         padding: 12px;
-        border-radius: 25px;
+        border-radius: 8px;
         border: none;
         outline: none;
         font-size: 15px;
+        background: #0f172a;
+        color: white;
     }
 
     .btn {
-        background: white;
-        color: #6284FF;
+        background: #38bdf8;
         border: none;
-        border-radius: 25px;
         padding: 10px 18px;
-        font-weight: bold;
+        border-radius: 8px;
+        font-weight: 600;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.2s;
     }
 
     .btn:hover {
-        transform: scale(1.05);
+        background: #0ea5e9;
+    }
+
+    .filters {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+    }
+
+    .filter-btn {
+        background: transparent;
+        border: 1px solid #38bdf8;
+        color: #38bdf8;
+        padding: 5px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .filter-btn.active {
+        background: #38bdf8;
+        color: black;
     }
 
     .list-container {
-        margin-top: 20px;
-        max-height: 300px;
+        margin-top: 10px;
+        max-height: 280px;
         overflow-y: auto;
     }
 
     .todo-item {
-        background: rgba(255,255,255,0.2);
-        padding: 12px 15px;
-        border-radius: 12px;
+        background: #0f172a;
+        padding: 10px;
+        border-radius: 10px;
         margin-bottom: 10px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        animation: fadeIn 0.25s ease-in-out;
-        transition: 0.3s;
+        align-items: center;
+        transition: 0.2s;
+    }
+
+    .todo-item:hover {
+        transform: translateX(3px);
     }
 
     .todo-left {
@@ -93,46 +119,36 @@
         gap: 10px;
     }
 
-    .todo-item p {
-        margin: 0;
-        font-size: 16px;
-        transition: 0.3s;
-    }
-
     .completed {
         text-decoration: line-through;
-        opacity: 0.6;
+        opacity: 0.5;
     }
 
-    .btn-delete {
-        background: transparent;
-        border: none;
-        color: white;
-        font-size: 18px;
+    .actions i {
         cursor: pointer;
-        transition: 0.3s;
+        margin-left: 10px;
+        opacity: 0.6;
+        transition: 0.2s;
     }
 
-    .btn-delete:hover {
-        transform: scale(1.2);
-        color: #ffdddd;
+    .actions i:hover {
+        opacity: 1;
     }
 
-    .empty {
-        text-align: center;
+    .footer {
+        position: fixed;
+        bottom: 15px;
+        right: 20px;
+        font-size: 14px;
         opacity: 0.7;
-        margin-top: 20px;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(5px); }
-        to { opacity: 1; transform: translateY(0); }
+    .footer a {
+        color: #38bdf8;
+        text-decoration: none;
+        margin-left: 10px;
     }
 
-    .fade-out {
-        opacity: 0;
-        transform: translateX(20px);
-    }
 </style>
 
 <body>
@@ -146,11 +162,28 @@
         <button class="btn" onclick="add()">Add</button>
     </div>
 
+    <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all')">All</button>
+        <button class="filter-btn" onclick="setFilter('active')">Active</button>
+        <button class="filter-btn" onclick="setFilter('completed')">Completed</button>
+    </div>
+
     <div class="list-container" id="list-container"></div>
+</div>
+
+<div class="footer">
+    <span>Connect:</span>
+    <a href="https://instagram.com/adityaw007" target="_blank">
+        <i class="fa-brands fa-instagram"></i> adityaw007
+    </a>
+    <a href="https://github.com/adityaw20" target="_blank">
+        <i class="fa-brands fa-github"></i> adityaw20
+    </a>
 </div>
 
 <script>
     let todolist = [];
+    let currentFilter = "all";
 
     const stored = localStorage.getItem("todolist");
     if (stored) todolist = JSON.parse(stored);
@@ -161,7 +194,7 @@
         const input = document.getElementById("input");
         const value = input.value.trim();
 
-        if (value === "") return;
+        if (!value) return;
 
         todolist.push({ text: value, completed: false });
         input.value = "";
@@ -175,13 +208,28 @@
     }
 
     function deleteItem(index) {
-        const item = document.getElementById(`item-${index}`);
-        item.classList.add("fade-out");
+        todolist.splice(index, 1);
+        saveAndRender();
+    }
 
-        setTimeout(() => {
-            todolist.splice(index, 1);
+    function editItem(index) {
+        const newText = prompt("Edit task:", todolist[index].text);
+        if (newText !== null && newText.trim() !== "") {
+            todolist[index].text = newText.trim();
             saveAndRender();
-        }, 250);
+        }
+    }
+
+    function setFilter(filter) {
+        currentFilter = filter;
+
+        document.querySelectorAll(".filter-btn").forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+        event.target.classList.add("active");
+
+        renderTodo();
     }
 
     function saveAndRender() {
@@ -198,32 +246,42 @@
         const remaining = todolist.filter(t => !t.completed).length;
         counter.innerText = `${remaining} task(s) remaining`;
 
-        if (todolist.length === 0) {
-            listContainer.innerHTML = `<div class="empty">No tasks yet ✨</div>`;
-            counter.innerText = "";
-            return;
-        }
+        let filteredList = todolist;
 
-        todolist.forEach((todo, index) => {
+        if (currentFilter === "active")
+            filteredList = todolist.filter(t => !t.completed);
+
+        if (currentFilter === "completed")
+            filteredList = todolist.filter(t => t.completed);
+
+        filteredList.forEach((todo, index) => {
+            const realIndex = todolist.indexOf(todo);
+
             listContainer.innerHTML += `
-                <div class="todo-item" id="item-${index}">
+                <div class="todo-item">
                     <div class="todo-left">
-                        <input type="checkbox" 
-                               ${todo.completed ? "checked" : ""} 
-                               onclick="toggleComplete(${index})">
-                        <p class="${todo.completed ? "completed" : ""}">
+                        <input type="checkbox"
+                               ${todo.completed ? "checked" : ""}
+                               onclick="toggleComplete(${realIndex})">
+
+                        <span class="${todo.completed ? "completed" : ""}">
                             ${todo.text}
-                        </p>
+                        </span>
                     </div>
-                    <button class="btn-delete" onclick="deleteItem(${index})">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+
+                    <div class="actions">
+                        <i class="fa-solid fa-pen"
+                           onclick="editItem(${realIndex})"></i>
+
+                        <i class="fa-solid fa-trash"
+                           onclick="deleteItem(${realIndex})"></i>
+                    </div>
                 </div>
             `;
         });
     }
 
-    document.getElementById("input").addEventListener("keypress", function(e) {
+    document.getElementById("input").addEventListener("keypress", e => {
         if (e.key === "Enter") add();
     });
 </script>
