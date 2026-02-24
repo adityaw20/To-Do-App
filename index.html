@@ -8,36 +8,72 @@
 </head>
 
 <style>
+    :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: rgba(30,41,59,0.8);
+        --bg-item: rgba(30,41,59,0.7);
+        --text-primary: white;
+        --accent: #38bdf8;
+    }
+
+    body.light {
+        --bg-primary: #f1f5f9;
+        --bg-secondary: rgba(255,255,255,0.8);
+        --bg-item: rgba(255,255,255,0.7);
+        --text-primary: #0f172a;
+        --accent: #0ea5e9;
+    }
+
     body {
         margin: 0;
         font-family: 'Segoe UI', sans-serif;
-        background: #0f172a;   /* Professional dark */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        color: white;
+        background-image: url('https://img.freepik.com/free-vector/set-torii-gates-water_52683-44986.jpg?semt=ais_user_personalization&w=740&q=80');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        color: var(--text-primary);
+        transition: 0.3s;
+        overflow: hidden;
+    }
+
+    /* 🌫 Overlay for readability */
+    body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: var(--bg-primary);
+        opacity: 0.75;
+        pointer-events: none;
     }
 
     .app-container {
-        background: #1e293b;
+        background: var(--bg-secondary);
         width: 420px;
         padding: 25px;
         border-radius: 15px;
         box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        position: relative;
+        z-index: 1;
+        transition: 0.3s;
     }
 
     h1 {
         margin: 0;
         text-align: center;
-        font-weight: 600;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
     }
 
     .counter {
         text-align: center;
         font-size: 14px;
-        opacity: 0.6;
-        margin-bottom: 20px;
+        opacity: 0.7;
+        margin-bottom: 15px;
     }
 
     .input-container {
@@ -52,12 +88,12 @@
         border: none;
         outline: none;
         font-size: 15px;
-        background: #0f172a;
-        color: white;
+        background: var(--bg-item);
+        color: var(--text-primary);
     }
 
     .btn {
-        background: #38bdf8;
+        background: var(--accent);
         border: none;
         padding: 10px 18px;
         border-radius: 8px;
@@ -67,7 +103,7 @@
     }
 
     .btn:hover {
-        background: #0ea5e9;
+        transform: scale(1.05);
     }
 
     .filters {
@@ -79,27 +115,25 @@
 
     .filter-btn {
         background: transparent;
-        border: 1px solid #38bdf8;
-        color: #38bdf8;
+        border: 1px solid var(--accent);
+        color: var(--accent);
         padding: 5px 12px;
         border-radius: 20px;
         cursor: pointer;
-        transition: 0.2s;
     }
 
     .filter-btn.active {
-        background: #38bdf8;
+        background: var(--accent);
         color: black;
     }
 
     .list-container {
-        margin-top: 10px;
-        max-height: 280px;
+        max-height: 260px;
         overflow-y: auto;
     }
 
     .todo-item {
-        background: #0f172a;
+        background: var(--bg-item);
         padding: 10px;
         border-radius: 10px;
         margin-bottom: 10px;
@@ -110,7 +144,7 @@
     }
 
     .todo-item:hover {
-        transform: translateX(3px);
+        transform: translateX(4px);
     }
 
     .todo-left {
@@ -126,13 +160,24 @@
 
     .actions i {
         cursor: pointer;
-        margin-left: 10px;
+        margin-left: 12px;
         opacity: 0.6;
-        transition: 0.2s;
     }
 
     .actions i:hover {
         opacity: 1;
+        transform: scale(1.15);
+    }
+
+    .theme-toggle {
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--accent);
+        transition: 0.3s;
+    }
+
+    .theme-toggle:hover {
+        transform: rotate(20deg);
     }
 
     .footer {
@@ -140,11 +185,12 @@
         bottom: 15px;
         right: 20px;
         font-size: 14px;
-        opacity: 0.7;
+        opacity: 0.75;
+        z-index: 1;
     }
 
     .footer a {
-        color: #38bdf8;
+        color: var(--accent);
         text-decoration: none;
         margin-left: 10px;
     }
@@ -154,7 +200,11 @@
 <body>
 
 <div class="app-container">
-    <h1>My Tasks</h1>
+    <div class="top-bar">
+        <h1>My Tasks</h1>
+        <i class="fa-solid fa-moon theme-toggle" onclick="toggleTheme()" id="themeIcon"></i>
+    </div>
+
     <div class="counter" id="counter"></div>
 
     <div class="input-container">
@@ -188,7 +238,28 @@
     const stored = localStorage.getItem("todolist");
     if (stored) todolist = JSON.parse(stored);
 
+    /* 🌗 Theme Memory */
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        document.body.classList.add("light");
+        document.getElementById("themeIcon").className = "fa-solid fa-sun theme-toggle";
+    }
+
     renderTodo();
+
+    function toggleTheme() {
+        document.body.classList.toggle("light");
+
+        const icon = document.getElementById("themeIcon");
+
+        if (document.body.classList.contains("light")) {
+            icon.className = "fa-solid fa-sun theme-toggle";
+            localStorage.setItem("theme", "light");
+        } else {
+            icon.className = "fa-solid fa-moon theme-toggle";
+            localStorage.setItem("theme", "dark");
+        }
+    }
 
     function add() {
         const input = document.getElementById("input");
@@ -214,8 +285,8 @@
 
     function editItem(index) {
         const newText = prompt("Edit task:", todolist[index].text);
-        if (newText !== null && newText.trim() !== "") {
-            todolist[index].text = newText.trim();
+        if (newText) {
+            todolist[index].text = newText;
             saveAndRender();
         }
     }
@@ -254,7 +325,7 @@
         if (currentFilter === "completed")
             filteredList = todolist.filter(t => t.completed);
 
-        filteredList.forEach((todo, index) => {
+        filteredList.forEach(todo => {
             const realIndex = todolist.indexOf(todo);
 
             listContainer.innerHTML += `
